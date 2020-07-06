@@ -10,10 +10,11 @@ headers = []
 values = []
 row_count = wb['Sheet1'].max_row
 col_count = wb['Sheet1'].max_column
-counter = 1
+counter = 0
 
 for row in wb['Sheet1'].iter_rows(min_row=0, max_col=col_count, max_row=row_count):
   for i, cell in enumerate(row):
+    counter += 1
     if (len(headers) == col_count):
       # try to parse date as string to format
       if ('DATE' in headers[i] or 'TIME' in headers[i]):
@@ -30,9 +31,9 @@ for row in wb['Sheet1'].iter_rows(min_row=0, max_col=col_count, max_row=row_coun
     if (len(headers) != col_count):
       headers.append(cell.value)
     
-    counter += 1
+    
     if (counter == col_count):
-      counter = 1
+      counter = 0
       if (inter_dict):
         values.append(inter_dict)
         inter_dict = {}
@@ -40,5 +41,5 @@ for row in wb['Sheet1'].iter_rows(min_row=0, max_col=col_count, max_row=row_coun
 if (values):
   target_dict.update({ 'Sheet1': values })
   print(target_dict)
-  # with open('output.json', 'w') as output:
-  #  json.dump(target_dict, output)
+  with open('output.json', 'w') as output:
+    json.dump(target_dict, output)
