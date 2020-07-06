@@ -1,0 +1,5 @@
+/dev-env
+*.xlsx
+*.ods
+*.xlsm
+__pycache__
