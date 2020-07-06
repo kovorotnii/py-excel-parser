@@ -4,14 +4,12 @@ import json
 import functions
 wb = load_workbook('sh1.xlsx')
 
-inter_dict = {}
+# target dict
 target_dict = {}
-headers = []
+# each sheet parsing result will be here
 values = []
-# row_count = wb['Sheet1'].max_row
-# col_count = wb['Sheet1'].max_column
-counter = 0
 
+# get a list of sheets
 sheets = functions.get_excel_sheets(wb)
 
 for current_sheet in sheets:
@@ -20,39 +18,16 @@ for current_sheet in sheets:
 
   print(row_count)
   print(col_count)
-
   print(current_sheet)
 
-  for row in wb[current_sheet].iter_rows(min_row=0, max_col=col_count, max_row=row_count):
-    for i, cell in enumerate(row):
-      counter += 1
-      if (len(headers) == col_count):
-        # try to parse date as string to format
-        if ('DATE' in headers[i] or 'TIME' in headers[i]):
-          if (not cell.value):
-            date = ''
-            inter_dict.update({ headers[i]:  date })
-          # cell value not none
-          if (cell.value):
-            date = datetime.strftime(cell.value, '%Y-%m-%dT%H:%M:%SZ')
-            inter_dict.update({ headers[i]:  date })
-        else:
-          inter_dict.update({ headers[i]: cell.value })
-      if (len(headers) != col_count):
-        headers.append(cell.value)
-      if (counter == col_count):
-        counter = 0
-        if (inter_dict):
-          values.append(inter_dict)
-          inter_dict = {}
+  values = functions.parse_excel(wb, current_sheet, col_count, row_count)
   
   if (values):
     target_dict.update({ current_sheet: values })
-    # print(target_dict)
     values = []
     headers = []
     inter_dict = {}
     counter = 0
 
 with open('output.json', 'w') as output:
-    json.dump(target_dict, output)
+    json.dump(target_dict, output, ensure_ascii=False)
