@@ -5,9 +5,7 @@ import click
 
 @click.command()
 @click.option('--excel_path', required=True, help='Path to input - excel file, example: /user/income.xlsm')
-# @click.argument('excel_path', required=True, default='data.xlsm', )
 @click.option('--json_path', default='default_.json', help='Output path to json, example: /user/output.json')
-# @click.argument('json_path', default='default_.json')
 def load_excel_file(excel_path, json_path):
   """ Load excel file and invoke parser method """ 
    # Processing default path if output path for json is not defined!
