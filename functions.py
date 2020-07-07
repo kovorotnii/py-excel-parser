@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateparser import parse
+import json
 
 def isAccessible(path, mode='r'):
     """ check if file is accessbile """
@@ -11,7 +12,19 @@ def isAccessible(path, mode='r'):
     return True
 
 def get_excel_sheets(wb):
+  """ return all possible sheets from excel file """
   return wb.sheetnames
+
+def isJSON(income_str):
+  """ Check if income string is JSON """
+  if type(income_str) != str:
+    return False
+  else:
+    try: 
+      json_resp = json.loads(income_str)
+    except ValueError:
+      return False
+    return True
 
 def parse_excel(wb, current_sheet, col_count, row_count):
   # an array which stores column headers
@@ -42,10 +55,10 @@ def parse_excel(wb, current_sheet, col_count, row_count):
               if ('TIME' in headers[i]):
                 inter_dict.update({ headers[i]: cell.value })
         else:
-          # if cell.value is None:
-          #   inter_dict.update({ headers[i]: cell.value })
-          # if cell.value:
-          inter_dict.update({ headers[i]: cell.value })
+          if not isJSON(cell.value):
+            inter_dict.update({ headers[i]: cell.value })
+          else:
+            inter_dict.update({headers[i]: json.loads(cell.value) })
       if (len(headers) != col_count):
         headers.append(cell.value)
       if (counter == col_count):
