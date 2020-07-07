@@ -3,12 +3,6 @@ from dateparser import parse
 import json
 from openpyxl import load_workbook, workbook, worksheet
 
-
-def load_excel_file(path):
-  """ Load work book by path """
-  wb = load_workbook(path)
-  return wb
-
 def isAccessible(path, mode='r'):
   """ Check if file is accessbile """
   try:
