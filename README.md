@@ -1,5 +1,6 @@
 # py-excel-parser
 
+### [Description in Russian](./description_rus.md)
 ### CLI utility for parsing excel file and form output json
  - #### Used `python 3.8`
  - #### Support `.xlsx`, `xlsm`, `xltx`, `xltm` Excel extensions
@@ -20,7 +21,7 @@
     - `python main.py --excel_path /home/ik/workspace/data.xlsm --json_path  /home/ik/output.json`
 
   - #### While executing script you will get messages:
-   - About checking output file existence
-   - Performing loading of workbook
-   - Which sheet was parsed
-   - Parsing procedure completion
+    - About checking output file existence
+    - Performing loading of workbook
+    - Which sheet was parsed
+    - Parsing procedure completion
