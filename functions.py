@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from dateparser import parse
 import json
 
@@ -39,21 +39,24 @@ def parse_excel(wb, current_sheet, col_count, row_count):
     for i, cell in enumerate(row):
       counter += 1
       if (len(headers) == col_count):
+        # skip none values
+        if headers[i] is None:
+          continue
+
         # try to parse date as string to format
         if ('DATE' in headers[i] or 'TIME' in headers[i]):
           if (cell.value is None):
             inter_dict.update({ headers[i]: None })
+          
           # cell value not none
           if (cell.value):
             try:
-              date = datetime.strftime(cell.value, '%Y-%m-%dT%H:%M:%SZ')
-              inter_dict.update({ headers[i]:  date })
-            except TypeError:
-              new_date = parse(cell.value, date_formats=['%Y-%m-%d'])
-              if ('DATE' in headers[i]):
-                inter_dict.update({ headers[i]: datetime.strftime(new_date, '%Y-%m-%dT%H:%M:%SZ') })
-              if ('TIME' in headers[i]):
-                inter_dict.update({ headers[i]: cell.value })
+              if (type(cell.value) == datetime.datetime):
+                inter_dict.update({ headers[i]: datetime.datetime.strftime(cell.value, '%Y-%m-%dT%H:%M:%SZ')})
+              if (type(cell.value) == datetime.time):
+                inter_dict.update({ headers[i]: str(cell.value) }) 
+            except TypeError as e:
+              print('Error ', e)
         else:
           if not isJSON(cell.value):
             inter_dict.update({ headers[i]: cell.value })
@@ -66,5 +69,32 @@ def parse_excel(wb, current_sheet, col_count, row_count):
         if (inter_dict):
           values.append(inter_dict)
           inter_dict = {}
-  
+          
   return values
+
+  # try:
+              #   # processing case only have hours and seconds based on test data
+              #   # example 12:34:00
+              #   if 'TIME' in headers[i]:
+              #     print(cell.value)
+              #     if (type(cell.value) == datetime.date):
+              #       date_value = str(date_value)
+              #       if ':' in date_value:
+              #         print(date_value)
+              #         inter_dict.update({ headers[i]: date_value})
+              #       if ':' and '/' in date_value:
+              #         print('before parsing', date_value)
+              #         parsed_date = parse(date_value, date_formats=['%Y-%m-%d'])
+              #         inter_dict.update({ headers[i]: datetime.strftime(parsed_date, '%Y-%m-%dT%H:%M:%SZ') })     
+              #     continue
+
+              #   # Try to parse other dates income format
+              #   new_date = parse(cell.value, date_formats=['%Y-%m-%d'])
+              #   print(cell.value)
+              #   print(headers[i])
+              #   # if ('DATE' in headers[i]):
+              #   inter_dict.update({ headers[i]: datetime.strftime(new_date, '%Y-%m-%dT%H:%M:%SZ') })
+              #   # if ('TIME' in headers[i]):
+              #   # inter_dict.update({ headers[i]: cell.value })
+              # except OverflowError:
+              #   inter_dict.update({ headers[i]: cell.value})
