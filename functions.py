@@ -38,7 +38,7 @@ def parse_excel(wb, current_sheet, col_count, row_count):
             except TypeError:
               new_date = parse(cell.value, date_formats=['%Y-%m-%d'])
               if ('DATE' in headers[i]):
-                inter_dict.update({ headers[i]: datetime.strftime(new_date, '%Y-%m-%d') })
+                inter_dict.update({ headers[i]: datetime.strftime(new_date, '%Y-%m-%dT%H:%M:%SZ') })
               if ('TIME' in headers[i]):
                 inter_dict.update({ headers[i]: cell.value })
         else:
@@ -52,7 +52,6 @@ def parse_excel(wb, current_sheet, col_count, row_count):
         counter = 0
         if (inter_dict):
           values.append(inter_dict)
-          print(values)
           inter_dict = {}
   
   return values
