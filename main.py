@@ -4,11 +4,12 @@ import functions
 import click
 
 @click.command()
-@click.option('--excel_path', help='Set path to excel file')
-@click.option('--json_path', help='Set output path to json with name')
-@click.argument('excel_path', default='data.xlsm')
-@click.argument('json_path', default='output.json')
+@click.option('--excel_path', required=True, help='Path to input - excel file, example: /user/income.xlsm')
+# @click.argument('excel_path', required=True, default='data.xlsm', )
+@click.option('--json_path', default='default_.json', help='Output path to json, example: /user/output.json')
+# @click.argument('json_path', default='default_.json')
 def load_excel_file(excel_path, json_path):
+  print(json_path)
   """ Excel book parser \n
       1. Load excel book from file \n
       2. Parse it \n
@@ -30,11 +31,10 @@ def load_excel_file(excel_path, json_path):
     quit()
 
   # if excel was found, try to parse it  
-  main_execution(wb, json_path)
+  main_execution(wb, excel_path, json_path)
 
 
-def main_execution(wb, json_path):
-
+def main_execution(wb, excel_path, json_path):
   # target dict
   target_dict = {}
   # each sheet parsing result will be here
@@ -58,6 +58,13 @@ def main_execution(wb, json_path):
     values = []
 
   try:
+    if json_path == 'default_.json':
+      try:
+        dot_index = excel_path.index('.')
+        json_path = f'{excel_path[:dot_index]}.json'
+      except ValueError:
+        json_path = 'output.json'
+
     with open(json_path, 'w') as output:
       data = json.dumps(target_dict, ensure_ascii=False)
       output.write(data)
