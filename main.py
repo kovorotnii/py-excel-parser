@@ -2,7 +2,7 @@ from openpyxl import load_workbook, workbook, worksheet
 from datetime import datetime
 import json
 import functions
-wb = load_workbook('sh2.xlsx')
+wb = load_workbook('data.xlsm', data_only=True)
 
 # target dict
 target_dict = {}
@@ -20,14 +20,13 @@ for current_sheet in sheets:
   print(col_count)
   print(current_sheet)
 
-  values = functions.parse_excel(wb, current_sheet, col_count, row_count)
+  if current_sheet == 'loco_26':
+
+    values = functions.parse_excel(wb, current_sheet, col_count, row_count)
   
-  if (values):
-    target_dict.update({ current_sheet: values })
-    values = []
-    headers = []
-    inter_dict = {}
-    counter = 0
+    if (values):
+      target_dict.update({ current_sheet: values })
+      values = []
 
 with open('output.json', 'w') as output:
     data = json.dumps(target_dict, ensure_ascii=False)
