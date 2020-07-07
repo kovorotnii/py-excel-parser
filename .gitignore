@@ -3,3 +3,4 @@
 *.ods
 *.xlsm
 __pycache__
+*.json
