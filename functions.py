@@ -28,6 +28,7 @@ def isJSON(income_str):
     return True
 
 def parse_excel(wb, current_sheet, col_count, row_count):
+  """ Parse excel rows and columns values & return array of dicts (each row is a dict) """
   # an array which stores column headers
   headers = []
   # an array contains each row as object 
