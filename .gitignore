@@ -1,6 +1,4 @@
 /dev-env
-*.xlsx
 *.ods
 *.xlsm
 __pycache__
-*.json
