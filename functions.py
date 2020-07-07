@@ -1,18 +1,25 @@
 import datetime
 from dateparser import parse
 import json
+from openpyxl import load_workbook, workbook, worksheet
+
+
+def load_excel_file(path):
+  """ Load work book by path """
+  wb = load_workbook(path)
+  return wb
 
 def isAccessible(path, mode='r'):
-    """ check if file is accessbile """
-    try:
-        f = open(path, mode)
-        f.close()
-    except IOError:
-        return False
-    return True
+  """ Check if file is accessbile """
+  try:
+    f = open(path, mode)
+    f.close()
+  except IOError:
+      return False
+  return True
 
 def get_excel_sheets(wb):
-  """ return all possible sheets from excel file """
+  """ Return all possible sheets from excel file """
   return wb.sheetnames
 
 def isJSON(income_str):
