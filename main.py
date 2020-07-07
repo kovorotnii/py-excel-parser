@@ -1,14 +1,15 @@
 from openpyxl import load_workbook, workbook, worksheet
-from datetime import datetime
 import json
 import functions
+
+print('Loading work book! Keep patience!')
+
 wb = load_workbook('data.xlsm', data_only=True)
 
 # target dict
 target_dict = {}
 # each sheet parsing result will be here
 values = []
-
 # get a list of sheets
 sheets = functions.get_excel_sheets(wb)
 
