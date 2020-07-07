@@ -2,7 +2,7 @@ from openpyxl import load_workbook, workbook, worksheet
 from datetime import datetime
 import json
 import functions
-wb = load_workbook('sh1.xlsx')
+wb = load_workbook('sh2.xlsx')
 
 # target dict
 target_dict = {}
@@ -30,4 +30,6 @@ for current_sheet in sheets:
     counter = 0
 
 with open('output.json', 'w') as output:
-    json.dump(target_dict, output, ensure_ascii=False)
+    data = json.dumps(target_dict, ensure_ascii=False)
+    output.write(data)
+    output.close()
