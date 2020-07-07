@@ -1,5 +1,6 @@
 astroid==2.4.2
 autopep8==1.5.3
+click==7.1.2
 dateparser==0.7.6
 et-xmlfile==1.0.1
 isort==4.3.21
