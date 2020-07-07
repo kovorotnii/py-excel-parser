@@ -1,4 +1,5 @@
 from datetime import datetime
+from dateparser import parse
 
 def isAccessible(path, mode='r'):
     """ check if file is accessbile """
@@ -27,14 +28,23 @@ def parse_excel(wb, current_sheet, col_count, row_count):
       if (len(headers) == col_count):
         # try to parse date as string to format
         if ('DATE' in headers[i] or 'TIME' in headers[i]):
-          if (not cell.value):
-            date = ''
-            inter_dict.update({ headers[i]:  date })
+          if (cell.value is None):
+            inter_dict.update({ headers[i]: None })
           # cell value not none
           if (cell.value):
-            date = datetime.strftime(cell.value, '%Y-%m-%dT%H:%M:%SZ')
-            inter_dict.update({ headers[i]:  date })
+            try:
+              date = datetime.strftime(cell.value, '%Y-%m-%dT%H:%M:%SZ')
+              inter_dict.update({ headers[i]:  date })
+            except TypeError:
+              new_date = parse(cell.value, date_formats=['%Y-%m-%d'])
+              if ('DATE' in headers[i]):
+                inter_dict.update({ headers[i]: datetime.strftime(new_date, '%Y-%m-%d') })
+              if ('TIME' in headers[i]):
+                inter_dict.update({ headers[i]: cell.value })
         else:
+          # if cell.value is None:
+          #   inter_dict.update({ headers[i]: cell.value })
+          # if cell.value:
           inter_dict.update({ headers[i]: cell.value })
       if (len(headers) != col_count):
         headers.append(cell.value)
@@ -42,6 +52,7 @@ def parse_excel(wb, current_sheet, col_count, row_count):
         counter = 0
         if (inter_dict):
           values.append(inter_dict)
+          print(values)
           inter_dict = {}
   
   return values
