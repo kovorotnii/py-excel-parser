@@ -9,12 +9,15 @@ import click
 @click.option('--json_path', default='default_.json', help='Output path to json, example: /user/output.json')
 # @click.argument('json_path', default='default_.json')
 def load_excel_file(excel_path, json_path):
-  print(json_path)
-  """ Excel book parser \n
-      1. Load excel book from file \n
-      2. Parse it \n
-      3. Form output json file according to excel content
-  """
+  """ Load excel file and invoke parser method """ 
+   # Processing default path if output path for json is not defined!
+  if json_path == 'default_.json':
+    try:
+      dot_index = excel_path.index('.')
+      json_path = f'{excel_path[:dot_index]}.json'
+    except ValueError:
+      json_path = 'output.json'
+    
   print('Checking output file existence.....')
   # Check if file was created earlier
   is_exist = functions.isAccessible(json_path)
@@ -58,13 +61,6 @@ def main_execution(wb, excel_path, json_path):
     values = []
 
   try:
-    if json_path == 'default_.json':
-      try:
-        dot_index = excel_path.index('.')
-        json_path = f'{excel_path[:dot_index]}.json'
-      except ValueError:
-        json_path = 'output.json'
-
     with open(json_path, 'w') as output:
       data = json.dumps(target_dict, ensure_ascii=False)
       output.write(data)
